@@ -1,0 +1,33 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samuel408/tech-life-blog.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/samuel408/tech-life-blog/issues"
+  },
+  "homepage": "https://github.com/samuel408/tech-life-blog#readme",
+  "dependencies": {
+    "connect-session-sequelize": "^7.1.1",
+    "controllers": "0.0.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-handlebars": "^5.2.1",
+    "express-session": "^1.17.1",
+    "install": "^0.13.0",
+    "mysql2": "^2.2.5",
+    "npm": "^7.6.3",
+    "sequelize": "^6.5.0"
+  }
+}
