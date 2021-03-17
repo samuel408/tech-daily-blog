@@ -15,12 +15,13 @@
     <h1>
       <a href="/"> Tech Daily  </a>
     </h1>
-    <nav >
-      <a href="/login"> login</a>
-
+  <nav>
+  {{#if loggedIn}}
   <button id="logout" class="btn-no-style">logout</button>
+  {{else}}
   <a href="/login">login</a>
-    </nav>
+  {{/if}}
+</nav>
   </header>
     </header>
     <main>
@@ -31,8 +32,9 @@
     </footer>
   </div>
   {{!-- scripts --}}
+  {{#if loggedIn}}
   <script src="/javascript/logout.js"></script>
-
+  {{/if}}
 </body>
 
 </html>
