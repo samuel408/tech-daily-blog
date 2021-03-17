@@ -4,6 +4,8 @@
 ## discription 
   tech daily is a blog posting site that allows users to make posts have other users comment on those posts. the project also allows users to create profiles and login and out. the users can also edit and delete posts as they see fit.
 
+ program![Link](https://infinite-beach-92379.herokuapp.com)
+ ![screenshot](./screenshot.jpg)
 ## Table of contents 
 
 * [Installation](#installation)
