@@ -179,3 +179,8 @@
     padding: 1%;
     font-size: 110%;
   }
+
+  .new-title{
+    font-weight: bold;
+    color: royalblue;
+  }

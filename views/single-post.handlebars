@@ -1,7 +1,8 @@
 <article class="post">
   <div class="title">
-    <a href="{{post.post_url}}" target="_blank">{{post.title}}</a>
-    <span>({{post.post_url}})</span>
+    <h4>{{post.title}}</h4>
+    </br>
+    <h5>({{post.post_url}})</h5>
   </div>
   <div class="meta">
     posted by {{post.user.username}} on
@@ -22,19 +23,9 @@
   </div>
 </form>
 {{/if}}
+{{!-- imports comments --}}
+{{> comments post.comments}}
 
-<div class="comments">
-  {{#each post.comments}}
-  <section class="comment">
-    <div class="meta">
-      {{user.username}} on {{created_at}}
-    </div>
-    <div class="text">
-      {{comment_text}}
-    </div>
-  </section>
-  {{/each}}
-</div>
 
 {{#if loggedIn}}
 <script src="/javascript/comment.js"></script>
