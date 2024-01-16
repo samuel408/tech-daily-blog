@@ -20,7 +20,7 @@
 
 
 ## installations 
-the program is up on heroku
+clone repo, install dependencies, run "npm start" on commandline
 ## usage
   create,edit,delete,login,logout.
 
