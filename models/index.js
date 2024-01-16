@@ -3,27 +3,37 @@ const Post = require("./Post");
 const Comment = require("./Comment")
 
 // create associations
-User.hasMany(Post, {
-    foreignKey: 'user_id'
-  });
-  Post.belongsTo(User, {
-    foreignKey: 'user_id',
-  });
-  Comment.belongsTo(User, {
-    foreignKey: 'user_id'
-  });
-  
-  Comment.belongsTo(Post, {
-    foreignKey: 'post_id'
-  });
-  
-  User.hasMany(Comment, {
-    foreignKey: 'user_id'
-  });
-  
-  Post.hasMany(Comment, {
-    foreignKey: 'post_id'
-  });
+const mongoose = require('mongoose');
 
-  
+const userSchema = new mongoose.Schema({
+  username: String,
+  email: String,
+  password: String,
+});
+
+const postSchema = new mongoose.Schema({
+  title: String,
+  post_url: String,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+});
+
+const commentSchema = new mongoose.Schema({
+  comment_text: String,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  post: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Post',
+  },
+});
+
+// const User = mongoose.model('User', userSchema);
+// const Post = mongoose.model('Post', postSchema);
+// const Comment = mongoose.model('Comment', commentSchema);
+
 module.exports = { User, Post, Comment };

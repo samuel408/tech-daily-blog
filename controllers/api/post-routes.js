@@ -1,8 +1,9 @@
 const router = require('express').Router();
 const sequelize = require('../../config/connection');
 const withAuth = require('../../utils/auth');
-const { Post, User, Comment } = require('../../models');
-
+const User = require('../../models/User');
+const Post = require('../../models/Post');
+const Comment = require('../../models/Comment');
 // get all users
 router.get('/', (req, res) => {
     Post.findAll({

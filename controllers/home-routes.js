@@ -1,101 +1,86 @@
 const router = require('express').Router();
-const sequelize = require('../config/connection');
+const mongoose = require('mongoose');
 const { Post, User, Comment } = require('../models');
 
-router.get('/', (req, res) => {
-  Post.findAll({
-    attributes: [
-      'id',
-      'post_url',
-      'title',
-      'created_at',
-    ],
-    include: [
-      {
-        model: Comment,
-        attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
-        include: {
-          model: User,
-          attributes: ['username']
-        }
-      },
-      {
-        model: User,
-        attributes: ['username']
-      }
-    ]
-  })
-    .then(dbPostData => {
-      // pass a single post object into the homepage template
-      const posts = dbPostData.map(post => post.get({ plain: true }));
 
-      res.render('homepage', {
-        posts,
-        loggedIn: req.session.loggedIn
-      });    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
+router.get('/', async (req, res) => {
+  try {
+    // Connect to MongoDB
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
     });
-});
+    console.log('Connected to MongoDB');
 
-router.get('/login', (req, res) => {
-  if (req.session.loggedIn) {
-    res.redirect('/');
-    return;
-  }
-  else {
-    res.render('login');
 
+    const dbPostData = await Post.find()
+      .select('id post_url title created_at')
+      .populate({
+        path: 'comments',
+        select: 'id comment_text post_id user_id created_at',
+        populate: {
+          path: 'user',
+          select: 'username',
+        },
+      })
+      .populate('user', 'username');
+
+    const posts = dbPostData.map(post => post.toObject());
+
+    res.render('homepage', {
+      posts,
+      loggedIn: req.session.loggedIn,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
   }
 });
-router.get('/post/:id', (req, res) => {
-  Post.findOne({
-    where: {
-      id: req.params.id
-    },
-    attributes: [
-      'id',
-      'post_url',
-      'title',
-      'created_at'
-    ],
-    include: [
-      {
-        model: Comment,
-        attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
-        include: {
-          model: User,
-          attributes: ['username']
-        }
-      },
-      {
-        model: User,
-        attributes: ['username']
-      }
-    ]
-  })
-    .then(dbPostData => {
-      if (!dbPostData) {
-        res.status(404).json({ message: 'No post found with this id' });
-        return;
-      }
 
-      // serialize the data
-      const post = dbPostData.get({ plain: true });
-
-      // pass data to template
-      res.render('single-post', {
-        post,
-        loggedIn: req.session.loggedIn
-      });
-      
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+router.get('/login', async (req, res) => {
+  try {
+    if (req.session.loggedIn) {
+      res.redirect('/');
+      return;
+    } else {
+      res.render('login');
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
 });
 
+
+router.get('/post/:id', async (req, res) => {
+  try {
+    const dbPostData = await Post.findById(req.params.id)
+      .select('id post_url title created_at')
+      .populate({
+        path: 'comments',
+        select: 'id comment_text post_id user_id created_at',
+        populate: {
+          path: 'user',
+          select: 'username',
+        },
+      })
+      .populate('user', 'username');
+
+    if (!dbPostData) {
+      res.status(404).json({ message: 'No post found with this id' });
+      return;
+    }
+
+    const post = dbPostData.toObject();
+
+    res.render('single-post', {
+      post,
+      loggedIn: req.session.loggedIn,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+});
 
 module.exports = router;
